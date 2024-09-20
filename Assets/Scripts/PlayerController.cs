@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -13,6 +12,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float playerMaxJumpHeight;
 
     private Rigidbody2D rigidBody2D;
+    private SpriteRenderer spriteRenderer;
+    private MovementDirection currentDirection;
 
     private void Awake()
     {
@@ -23,12 +24,24 @@ public class PlayerController : MonoBehaviour
         rigidBody2D = GetComponent<Rigidbody2D>();
         if (rigidBody2D == null)
             Debug.LogError($"Could not find component RigidBody2D");
+
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer == null)
+            Debug.LogError($"Could not find component spriteRenderer");
     }
 
     private void Start()
     {
+        GameManager.Instance.OnApplicationStarts.AddListener(() => OnApplicationStarts());
         GameManager.Instance.OnGameStarts.AddListener(() => OnGameStarts());
         GameManager.Instance.OnPlayerDie.AddListener(() => OnPlayerDie());
+    }
+
+    private void OnApplicationStarts()
+    {
+        DeathCounter = 0;
+        IsGrounded = false;
+        CanMove = false;
     }
 
     private void OnPlayerDie()
@@ -49,7 +62,7 @@ public class PlayerController : MonoBehaviour
     public void Respawn()
     {
         var spawnPosition = GameManager.Instance.GetSpawnPoint().position;
-        transform.position = new Vector2(spawnPosition.x, spawnPosition.z) + spawnOffset;
+        transform.position = new Vector2(spawnPosition.x, spawnPosition.y) + spawnOffset;
         Debug.Log("Respawned");
     }
 
@@ -61,33 +74,42 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"Game paused : {GameManager.Instance.IsGamePaused}");
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             Move(MovementDirection.LEFT);
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             Move(MovementDirection.RIGHT);
         }
+
+        HandleSpriteXFlip();
+    }
+
+    private void HandleSpriteXFlip()
+    {
+       spriteRenderer.flipX = currentDirection == MovementDirection.LEFT;
     }
 
     private void Move(MovementDirection direction)
     {
         Debug.Log($"moving to : {direction}");
+        currentDirection = direction;
         var speed = direction == MovementDirection.LEFT ? -playerSpeed : playerSpeed;
 
-        rigidBody2D.velocity.Set(speed * Time.deltaTime, 0);
+        rigidBody2D.velocity = new Vector2(speed * Time.deltaTime, 0);
     }
 
     private void Jump()
     {
         //todo : mecha jump -> press + long = sauter + haut
+        //todo : mecha wall jump
         Debug.Log("jumping");
         IsGrounded = false;
     }

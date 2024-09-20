@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public bool IsGamePaused { get; private set; }
 
+    [HideInInspector] public UnityEvent OnApplicationStarts;
     [HideInInspector] public UnityEvent<bool> OnGamePause;
     [HideInInspector] public UnityEvent OnPlayerDie;
     [HideInInspector] public UnityEvent OnGameStarts;
@@ -25,6 +27,16 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    private void Start()
+    {
+        OnApplicationStarts?.Invoke();
+    }
+
+    private void Initialize()
+    {
+        levelManager.DisplayMainMenu();
     }
 
     public void StartGame()

@@ -18,12 +18,21 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        GameManager.Instance.OnApplicationStarts.AddListener(() => OnApplicationStarts());
         GameManager.Instance.OnGameStarts.AddListener(() => OnGameStarts());
         GameManager.Instance.OnPlayerFinishesGame.AddListener(() => OnPlayerFinishesGame());
     }
 
+    private void OnApplicationStarts()
+    {
+        DisplayMainMenu();
+        HideLevels();
+        LevelIterationCounter = 0;
+    }
+
     public void ChangeLevel(int level)
     {
+        EnableMainMenu(false);
         HideLevels();
         DisplayLevel(level);
     }

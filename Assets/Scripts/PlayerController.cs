@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float yDeathLimit;
     [SerializeField] private float groundCheckerRadius;
     [SerializeField] private float playerSpeed;
-    [SerializeField] private float playerMinJumpHeight;
+    public float JumpForce;
     [SerializeField] private float playerMaxJumpHeight;
     [SerializeField] private float minJumpPressTime;
     [SerializeField] private float maxJumpPressTime;
@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded)
             return;
 
-        rigidBody2D.velocity = new Vector2( rigidBody2D.velocity.x, playerMinJumpHeight);
+        rigidBody2D.velocity = new Vector2( rigidBody2D.velocity.x, JumpForce);
         
         //todo : mecha jump -> press + long = sauter + haut
         //todo : mecha wall jump

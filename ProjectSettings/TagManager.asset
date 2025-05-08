@@ -6,6 +6,7 @@ TagManager:
   tags:
   - End
   - Ennemy
+  - Bouncer
   layers:
   - Default
   - TransparentFX

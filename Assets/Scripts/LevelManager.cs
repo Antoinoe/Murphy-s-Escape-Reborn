@@ -21,7 +21,7 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.OnApplicationStarts.AddListener(() => OnApplicationStarts());
         GameManager.Instance.OnGameStarts.AddListener(() => OnGameStarts());
         GameManager.Instance.OnPlayerFinishesGame.AddListener(() => OnPlayerFinishesGame());
-        GameManager.Instance.OnPlayerLevelTriggerEndPortal.AddListener(() => OnPlayerTriggerEndPortal());
+        GameManager.Instance.OnPlayerReachesEndPortal.AddListener(() => OnPlayerTriggerEndPortal());
     }
 
     private void OnPlayerTriggerEndPortal()
@@ -82,9 +82,10 @@ public class LevelManager : MonoBehaviour
 
     public void HideLevels()
     {
-        for (int i = 0; i < levelObjectsRoot.childCount; i++)
-            levelObjectsRoot.GetChild(i).gameObject.SetActive(false);
-        LevelIterationCounter = 0;
+        foreach (var obj in levelObjects) 
+        {
+            foreach(var o in obj.ObjectsToDisplay) { o.SetActive(false); }
+        }
     }
 
     private void OnGameStarts()
@@ -95,6 +96,7 @@ public class LevelManager : MonoBehaviour
 
     public void OnPlayerFinishesGame()
     {
+        LevelIterationCounter = 0;
         HideLevels();
         EnableMainMenu(false);
         DisplayVictoryMenu(true);

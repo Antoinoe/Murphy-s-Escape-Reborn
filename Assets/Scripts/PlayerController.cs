@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.collider.CompareTag(END_PORTAL_TAG_NAME))
         {
-            GameManager.Instance.OnPlayerLevelTriggerEndPortal?.Invoke();
+            GameManager.Instance.OnPlayerReachesEndPortal?.Invoke();
         }
         if (collision.collider.CompareTag(ENNEMY_TAG_NAME))
         {

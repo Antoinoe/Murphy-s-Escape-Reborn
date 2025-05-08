@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public UnityEvent<bool> OnGamePause;
     [HideInInspector] public UnityEvent OnPlayerDie;
     [HideInInspector] public UnityEvent OnGameStarts;
-    [HideInInspector] public UnityEvent OnPlayerLevelTriggerEndPortal;
+    [HideInInspector] public UnityEvent OnPlayerReachesEndPortal;
     [HideInInspector] public UnityEvent OnPlayerFinishesGame;
     [HideInInspector] public UnityEvent OnLevelDisplayed;
 

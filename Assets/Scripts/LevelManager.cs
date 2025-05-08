@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public int LevelIterationCounter { get; private set; }
+    [field: SerializeField] public int LevelIterationCounter { get; private set; }
 
     [field: SerializeField] public Transform SpawnPointRoot { get; private set; }
 
@@ -21,6 +21,13 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.OnApplicationStarts.AddListener(() => OnApplicationStarts());
         GameManager.Instance.OnGameStarts.AddListener(() => OnGameStarts());
         GameManager.Instance.OnPlayerFinishesGame.AddListener(() => OnPlayerFinishesGame());
+        GameManager.Instance.OnPlayerLevelTriggerEndPortal.AddListener(() => OnPlayerTriggerEndPortal());
+    }
+
+    private void OnPlayerTriggerEndPortal()
+    {
+        LevelIterationCounter++;
+        ChangeLevel(LevelIterationCounter);
     }
 
     private void OnApplicationStarts()
@@ -35,14 +42,15 @@ public class LevelManager : MonoBehaviour
         EnableMainMenu(false);
         HideLevels();
         DisplayLevel(level);
+        GameManager.Instance.OnLevelDisplayed?.Invoke();
     }
 
     private void DisplayLevel(int level)
     {
-        if (level < 0)
+        if (level <= 0)
             return;
 
-        if (level > levelObjects.Length - 1)
+        if (level > levelObjects.Length)
         {
             GameManager.Instance.OnPlayerFinishesGame?.Invoke();
             return;
@@ -55,7 +63,8 @@ public class LevelManager : MonoBehaviour
     {
         EnableMainMenu(false);
         DisplayVictoryMenu(false);
-        ChangeLevel(0);
+        LevelIterationCounter++;
+        ChangeLevel(LevelIterationCounter);
     }
 
     public void DisplayMainMenu()
@@ -75,10 +84,11 @@ public class LevelManager : MonoBehaviour
     {
         for (int i = 0; i < levelObjectsRoot.childCount; i++)
             levelObjectsRoot.GetChild(i).gameObject.SetActive(false);
+        LevelIterationCounter = 0;
     }
 
     private void OnGameStarts()
-        => ChangeLevel(0);
+        => StartGame();
 
     public void QuitGame()
         => GameManager.Instance.QuitGame();

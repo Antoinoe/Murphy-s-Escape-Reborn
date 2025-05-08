@@ -17,11 +17,6 @@ public class LevelSelectorEditor : Editor
             levelManagerTarget.StartGame();
         }
 
-        if (GUILayout.Button("level zero"))
-        {
-            levelManagerTarget.ChangeLevel(0);
-        }
-
         if (GUILayout.Button("level one"))
         {
             levelManagerTarget.ChangeLevel(1);
@@ -35,6 +30,16 @@ public class LevelSelectorEditor : Editor
         if (GUILayout.Button("level three"))
         {
             levelManagerTarget.ChangeLevel(3);
+        }
+
+        if (GUILayout.Button("level four"))
+        {
+            levelManagerTarget.ChangeLevel(4);
+        }
+
+        if (GUILayout.Button("level five"))
+        {
+            levelManagerTarget.ChangeLevel(5);
         }
 
         if (GUILayout.Button("Hide levels"))

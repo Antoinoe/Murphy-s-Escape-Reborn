@@ -135,8 +135,6 @@ public class PlayerController : MonoBehaviour
         CanMove = true;
     }
 
-
-
     private void UpdatePlayerHorizontalMovements()
     {
         var horizontalInputs = Input.GetAxisRaw("Horizontal");

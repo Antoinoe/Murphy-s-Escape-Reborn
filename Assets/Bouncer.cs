@@ -1,15 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bouncer : MonoBehaviour
 {
-    [SerializeField] PhysicMaterial bouncePhysics2D;
     [SerializeField] private float defaultBounceForce;
     [SerializeField] private float bounceJumpForce;
 
-    private void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        bouncePhysics2D.bounciness = Input.GetKey(KeyCode.Space) ? bounceJumpForce : defaultBounceForce;
+        if (collision.TryGetComponent<PlayerController>(out var player))
+        {
+            var playerRb = player.GetComponent<Rigidbody2D>();
+            playerRb.AddForce(Vector2.up * (Input.GetKey(KeyCode.Space) ? bounceJumpForce : defaultBounceForce));
+            Debug.Log("Bounce!");
+        }
     }
 }

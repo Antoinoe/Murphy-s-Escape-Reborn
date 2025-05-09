@@ -11766,9 +11766,9 @@ MonoBehaviour:
   yDeathLimit: -5
   groundCheckerRadius: 0.15
   playerSpeed: 450
-  JumpForce: 0
+  JumpForce: 5
   playerMaxJumpHeight: 5
-  minJumpPressTime: 0
+  minJumpPressTime: 5
   maxJumpPressTime: 0
   fallMultiplier: 0
 --- !u!4 &693057063

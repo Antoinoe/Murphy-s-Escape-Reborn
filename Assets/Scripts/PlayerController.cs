@@ -5,7 +5,10 @@ public class PlayerController : MonoBehaviour
 {
     [field:SerializeField] public bool CanMove { get; private set; }
     [field: SerializeField] public bool IsGrounded { get; private set; }
+    [field: SerializeField] public bool IsJumping { get; private set; }
     [field: SerializeField] public int DeathCounter { get; private set; }
+    [field: SerializeField] public float JumpForce { get; private set; }
+    [field: SerializeField] public float JumpTime { get; private set; }
 
     [SerializeField] private Vector2 spawnOffset;
     [SerializeField] private LayerMask groundLayerMask;
@@ -13,13 +16,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float yDeathLimit;
     [SerializeField] private float groundCheckerRadius;
     [SerializeField] private float playerSpeed;
-    public float JumpForce;
-    [SerializeField] private float playerMaxJumpHeight;
-    [SerializeField] private float minJumpPressTime;
-    [SerializeField] private float maxJumpPressTime;
     [SerializeField] private float fallMultiplier;
+    [SerializeField] private float jumpMultiplier;
 
-    private float currentJumpTime;
+    private float jumpCounter;
     private Rigidbody2D rigidBody2D;
     private SpriteRenderer spriteRenderer;
     private MovementDirection currentDirection;
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         if (spriteRenderer == null)
             Debug.LogError($"Could not find component spriteRenderer");
 
-        gravityMuliplier = new Vector2(0,Physics2D.gravity.y);
+        gravityMuliplier = new Vector2(0, -Physics2D.gravity.y);
     }
 
     private void Start()
@@ -51,46 +51,121 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.OnLevelDisplayed.AddListener(() => OnLevelDisplayed());
     }
 
+
+    float horizontal = 0f;
     private void Update()
     {
-        if (!CanMove)
-            return;
-
-        HandleInputs();
-    }
-    private void HandleInputs()
-    {
-        #region Pause
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GameManager.Instance.SetPause(!GameManager.Instance.IsGamePaused);
-            Debug.Log($"Game paused : {GameManager.Instance.IsGamePaused}");
-        }
-        #endregion
-
-        UpdateGroundChecker();
-        UpdateYVelocity();
         UpdateDeathFallChecker();
+        horizontal = Input.GetAxisRaw("Horizontal");
 
-        #region Jump
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Jump();
+            if (!CanMove)
+                return;
+
+            if (!IsGrounded)
+                return;
+
+            rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, JumpForce);
         }
-        #endregion
-       
-        UpdatePlayerHorizontalMovements();
-        UpdatePlayerSpriteDirection();
+
+        if (Input.GetKeyUp(KeyCode.Space) && rigidBody2D.velocity.y > 0)
+        {
+            rigidBody2D.velocity = new Vector2(rigidBody2D.velocity.x, rigidBody2D.velocity.y * 0.5f);
+        }
+    }
+    private void FixedUpdate()
+    {
+        IsGrounded = Physics2D.OverlapCircle(groundChecker.position, groundCheckerRadius, groundLayerMask);
+        rigidBody2D.velocity = new Vector2(horizontal * playerSpeed, rigidBody2D.velocity.y);
+        FlipPlayer();
     }
 
-    private void UpdateYVelocity()
+    private void FlipPlayer()
     {
-        if(rigidBody2D.velocity.y < 0)
+        if (horizontal == 1)
         {
-            rigidBody2D.velocity -= fallMultiplier * gravityMuliplier * Time.deltaTime;
+            currentDirection = MovementDirection.RIGHT;
         }
-        
+        else if (horizontal == -1)
+        {
+            currentDirection = MovementDirection.LEFT;
+        }
+
+        spriteRenderer.flipX = currentDirection == MovementDirection.LEFT;
     }
+
+    //private void Update()
+    //{
+    //    if (!CanMove)
+    //        return;
+
+    //    HandleInputs();
+    //}
+    //private void HandleInputs()
+    //{
+    //    #region Pause
+    //    if (Input.GetKeyDown(KeyCode.Escape))
+    //    {
+    //        GameManager.Instance.SetPause(!GameManager.Instance.IsGamePaused);
+    //        Debug.Log($"Game paused : {GameManager.Instance.IsGamePaused}");
+    //    }
+    //    #endregion
+
+    //    UpdateGroundChecker();
+    //    UpdateYVelocity();
+    //    UpdateDeathFallChecker();
+
+    //    #region Jump
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        Jump();
+    //    }
+    //    if (Input.GetKeyUp(KeyCode.Space))
+    //    {
+    //        IsJumping = false;
+    //    }
+    //    #endregion
+
+    //    UpdatePlayerHorizontalMovements();
+    //    UpdatePlayerSpriteDirection();
+    //}
+
+    private void Jump()
+    {
+
+
+        ////todo : mecha jump -> press + long = sauter + haut
+        //Debug.Log("jumping");
+
+        //if (rigidBody2D.velocity.y > 0 && IsJumping)
+        //{
+        //    jumpCounter += Time.deltaTime;
+        //    if (jumpCounter > JumpTime)
+        //    {
+        //        IsJumping = false;
+        //    }
+        //    float t = jumpCounter / JumpTime;
+        //    float currentJump = jumpMultiplier;
+        //    if(t>0.5f)
+        //        currentJump = jumpMultiplier * (1-t);
+        //    rigidBody2D.velocity += currentJump * Time.deltaTime * gravityMuliplier;
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.Space)) 
+        //{
+        //    IsJumping = false;
+        //}
+    }
+
+    //private void UpdateYVelocity()
+    //{
+    //    //if(rigidBody2D.velocity.y < 0 && !IsGrounded)
+    //    //{
+    //    //    rigidBody2D.velocity -= -fallMultiplier * Time.deltaTime * gravityMuliplier;
+    //    //}
+
+    //}
 
     private void Reset()
     {
@@ -116,14 +191,11 @@ public class PlayerController : MonoBehaviour
 
     private void KillPLayer()
     {
-        //todo (bonus) death anim -> OnFinish -> next;
         GameManager.Instance.OnPlayerDie?.Invoke();
     }
 
     private void UpdateGroundChecker()
     {
-        //var groundedObjectPos = new Vector2(groundChecker.transform.position.x, groundChecker.transform.position.z) + new Vector2(-0.01f, 0.375f);
-        //IsGrounded = Physics2D.OverlapCapsule(groundedObjectPos, new Vector2(0.35f, 0.9f), CapsuleDirection2D.Vertical,0, groundLayerMask);
         IsGrounded = Physics2D.OverlapCircle(groundChecker.position, groundCheckerRadius, groundLayerMask);
     }
 
@@ -138,8 +210,7 @@ public class PlayerController : MonoBehaviour
     private void UpdatePlayerHorizontalMovements()
     {
         var horizontalInputs = Input.GetAxisRaw("Horizontal");
-
-        rigidBody2D.velocity = new Vector2(playerSpeed * horizontalInputs * Time.deltaTime, rigidBody2D.velocity.y );
+        rigidBody2D.velocity = new Vector2(playerSpeed * Time.deltaTime * horizontalInputs, rigidBody2D.velocity.y );
 
         if(horizontalInputs == 1)
         {
@@ -154,24 +225,7 @@ public class PlayerController : MonoBehaviour
     private void UpdatePlayerSpriteDirection()
     {
         spriteRenderer.flipX = currentDirection == MovementDirection.LEFT;
-    }
-
-    private void Jump()
-    {
-        if (!CanMove)
-            return;
-
-        if (!IsGrounded)
-            return;
-
-        rigidBody2D.velocity = new Vector2( rigidBody2D.velocity.x, JumpForce);
-        
-        //todo : mecha jump -> press + long = sauter + haut
-        //todo : mecha wall jump
-        Debug.Log("jumping");
-        //IsGrounded = false;
-    }
-    //todo : collision ennemy
+    }   
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -179,6 +233,7 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.Instance.OnPlayerReachesEndPortal?.Invoke();
         }
+
         if (collision.collider.CompareTag(ENNEMY_TAG_NAME))
         {
             KillPLayer();
@@ -194,5 +249,4 @@ public class PlayerController : MonoBehaviour
     {
         Reset();
     }
-
 }

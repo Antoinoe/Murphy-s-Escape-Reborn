@@ -7328,20 +7328,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 976031768878504763, guid: 639064a0dc9eb0344bdef342a275f9cd, type: 3}
   m_PrefabInstance: {fileID: 404405378980998503}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &425612103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 425612099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90f5124d7b5f9904593b1082a539e720, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultBounceForce: 1
-  bounceJumpForce: 1.2
 --- !u!50 &425612104
 Rigidbody2D:
   serializedVersion: 4
@@ -11775,9 +11761,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cfc75359d1b08c4fb11f517a9115ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CanMove>k__BackingField: 0
-  <IsGrounded>k__BackingField: 0
-  <DeathCounter>k__BackingField: 3
+  <CanMove>k__BackingField: 1
+  <IsGrounded>k__BackingField: 1
+  <IsJumping>k__BackingField: 0
+  <DeathCounter>k__BackingField: 0
+  <JumpForce>k__BackingField: 6.5
+  <JumpTime>k__BackingField: 2
   spawnOffset: {x: 0, y: 0}
   groundLayerMask:
     serializedVersion: 2
@@ -11785,12 +11774,9 @@ MonoBehaviour:
   groundChecker: {fileID: 2137048667}
   yDeathLimit: -5
   groundCheckerRadius: 0.15
-  playerSpeed: 450
-  JumpForce: 5
-  playerMaxJumpHeight: 5
-  minJumpPressTime: 5
-  maxJumpPressTime: 0
-  fallMultiplier: 0
+  playerSpeed: 2
+  fallMultiplier: 0.5
+  jumpMultiplier: 1
 --- !u!4 &693057063
 Transform:
   m_ObjectHideFlags: 0
@@ -11800,7 +11786,7 @@ Transform:
   m_GameObject: {fileID: 693057061}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.25, y: -3, z: 0}
+  m_LocalPosition: {x: -6.25, y: -2.08, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11824,7 +11810,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 4b1c259372789844fa6258b40d6fc778, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -21713,7 +21699,7 @@ TilemapCollider2D:
   m_GameObject: {fileID: 1594103166}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 70bc38a97b930d849b66802e09b62038, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -24482,7 +24468,7 @@ Transform:
   m_GameObject: {fileID: 1772053722}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.87, y: -3.03, z: 0}
+  m_LocalPosition: {x: -7.39, y: -2.84, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -29958,9 +29944,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7247453885127931466, guid: 639064a0dc9eb0344bdef342a275f9cd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 425612103}
     - targetCorrespondingSourceObject: {fileID: 7247453885127931466, guid: 639064a0dc9eb0344bdef342a275f9cd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 425612104}

@@ -13,5 +13,9 @@ public class Bouncer : MonoBehaviour
             playerRb.AddForce(Vector2.up * (Input.GetKey(KeyCode.Space) ? bounceJumpForce : defaultBounceForce));
             Debug.Log("Bounce!");
         }
+        else
+        {
+            Debug.Log("could not find player controller");
+        }
     }
 }

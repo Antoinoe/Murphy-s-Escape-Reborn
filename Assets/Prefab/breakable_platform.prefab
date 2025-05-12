@@ -86,7 +86,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 8375922170489764634}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 70bc38a97b930d849b66802e09b62038, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sr: {fileID: 2796835119511420054}
-  delayBeforeBreak: 2
+  delayBeforeBreak: 0.75
   delayBeforeRespawn: 2
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   breakColor: {r: 0.735849, g: 0.19784619, b: 0.19784619, a: 1}

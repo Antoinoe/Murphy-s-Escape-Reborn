@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Twomper : MonoBehaviour
@@ -9,10 +7,9 @@ public class Twomper : MonoBehaviour
     [SerializeField] private float gravity;
     [SerializeField] private float delayBeforeResetingPosition;
     [SerializeField] private float resetPositionSpeed;
-    [SerializeField][Range(0f,1f)] private float startPosThreshold;
-
-    [SerializeField] private float yStartPosition;
-    [SerializeField] private bool isGoingUp = false;
+    
+    private float yStartPosition;
+    private bool isGoingUp;
 
     private void Awake()
     {
@@ -35,8 +32,10 @@ public class Twomper : MonoBehaviour
     private IEnumerator ResetPosition()
     {
         yield return new WaitForSeconds(delayBeforeResetingPosition);
+
         rb.gravityScale = 0;
         rb.velocity = resetPositionSpeed * Vector2.up;
+
         isGoingUp = true;
     }
 

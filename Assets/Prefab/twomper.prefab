@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.8, y: -1.11, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -129,8 +129,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 3762132549942274566}
   gravity: 0.9
-  delayBeforeResetingPosition: 3
-  resetPositionSpeed: 0.5
+  delayBeforeResetingPosition: 2
+  resetPositionSpeed: 0.75
   startPosThreshold: 0.1
   yStartPosition: 0
   isGoingUp: 0

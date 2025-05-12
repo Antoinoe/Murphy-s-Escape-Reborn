@@ -143,5 +143,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f5124d7b5f9904593b1082a539e720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultBounceForce: 300
-  bounceJumpForce: 500
+  defaultBounceForce: 250
+  bounceJumpForce: 400

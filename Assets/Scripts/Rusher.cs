@@ -1,13 +1,10 @@
-using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Rusher : MonoBehaviour
 {
     [SerializeField] private float walkSpeed;
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private Rigidbody2D rb;
-    private bool canWalk;
     private MovementDirection dir;
     private Vector2 startPosition;
 
@@ -32,7 +29,6 @@ public class Rusher : MonoBehaviour
     {
         if(collision.TryGetComponent<PlayerController>(out var player))
         {
-            canWalk = true;
             dir = transform.position.x - player.transform.position.x < 0 ? MovementDirection.LEFT : MovementDirection.RIGHT;
             sr.flipX = dir == MovementDirection.RIGHT;
             var dirMul = dir == MovementDirection.LEFT ? 1 : -1;
@@ -45,12 +41,7 @@ public class Rusher : MonoBehaviour
     {
         if(collision.TryGetComponent<PlayerController>(out var player))
         {
-            canWalk = false;
             rb.velocity = Vector2.zero;
         }
-    }
-
-    private void FixedUpdate()
-    {
     }
 }

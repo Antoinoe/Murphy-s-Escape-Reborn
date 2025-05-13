@@ -59,6 +59,9 @@ public class LevelManager : MonoBehaviour
         levelObjects.Where(x => x.Level == level).FirstOrDefault().ObjectsToDisplay.ForEach(y => y.SetActive(true));
     }
 
+    /// <summary>
+    /// Start Level 1 by default
+    /// </summary>
     public void StartGame()
     {
         EnableMainMenu(false);

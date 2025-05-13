@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float fallMultiplier;
     [SerializeField] private float jumpMultiplier;
 
-    private float jumpCounter;
     private Rigidbody2D rigidBody2D;
     private SpriteRenderer spriteRenderer;
     private MovementDirection currentDirection;
@@ -55,6 +54,11 @@ public class PlayerController : MonoBehaviour
     float horizontal = 0f;
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameManager.Instance.SetPause(!GameManager.Instance.IsGamePaused);
+        }
+
         UpdateDeathFallChecker();
         horizontal = Input.GetAxisRaw("Horizontal");
 
@@ -95,82 +99,9 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.flipX = currentDirection == MovementDirection.LEFT;
     }
 
-    //private void Update()
-    //{
-    //    if (!CanMove)
-    //        return;
-
-    //    HandleInputs();
-    //}
-    //private void HandleInputs()
-    //{
-    //    #region Pause
-    //    if (Input.GetKeyDown(KeyCode.Escape))
-    //    {
-    //        GameManager.Instance.SetPause(!GameManager.Instance.IsGamePaused);
-    //        Debug.Log($"Game paused : {GameManager.Instance.IsGamePaused}");
-    //    }
-    //    #endregion
-
-    //    UpdateGroundChecker();
-    //    UpdateYVelocity();
-    //    UpdateDeathFallChecker();
-
-    //    #region Jump
-    //    if (Input.GetKeyDown(KeyCode.Space))
-    //    {
-    //        Jump();
-    //    }
-    //    if (Input.GetKeyUp(KeyCode.Space))
-    //    {
-    //        IsJumping = false;
-    //    }
-    //    #endregion
-
-    //    UpdatePlayerHorizontalMovements();
-    //    UpdatePlayerSpriteDirection();
-    //}
-
-    private void Jump()
-    {
-
-
-        ////todo : mecha jump -> press + long = sauter + haut
-        //Debug.Log("jumping");
-
-        //if (rigidBody2D.velocity.y > 0 && IsJumping)
-        //{
-        //    jumpCounter += Time.deltaTime;
-        //    if (jumpCounter > JumpTime)
-        //    {
-        //        IsJumping = false;
-        //    }
-        //    float t = jumpCounter / JumpTime;
-        //    float currentJump = jumpMultiplier;
-        //    if(t>0.5f)
-        //        currentJump = jumpMultiplier * (1-t);
-        //    rigidBody2D.velocity += currentJump * Time.deltaTime * gravityMuliplier;
-        //}
-
-        //if (Input.GetKeyUp(KeyCode.Space)) 
-        //{
-        //    IsJumping = false;
-        //}
-    }
-
-    //private void UpdateYVelocity()
-    //{
-    //    //if(rigidBody2D.velocity.y < 0 && !IsGrounded)
-    //    //{
-    //    //    rigidBody2D.velocity -= -fallMultiplier * Time.deltaTime * gravityMuliplier;
-    //    //}
-
-    //}
-
     private void Reset()
     {
         DeathCounter = 0;
-        //IsGrounded = false;
         CanMove = false;
     }
 
@@ -178,7 +109,6 @@ public class PlayerController : MonoBehaviour
     {
         Respawn();
         DeathCounter++;
-        //update UI
     }
 
     private void UpdateDeathFallChecker()
@@ -194,11 +124,6 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.OnPlayerDie?.Invoke();
     }
 
-    private void UpdateGroundChecker()
-    {
-        IsGrounded = Physics2D.OverlapCircle(groundChecker.position, groundCheckerRadius, groundLayerMask);
-    }
-
     public void Respawn()
     {
         var spawnPosition = GameManager.Instance.GetSpawnPoint().position;
@@ -206,26 +131,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Respawned");
         CanMove = true;
     }
-
-    private void UpdatePlayerHorizontalMovements()
-    {
-        var horizontalInputs = Input.GetAxisRaw("Horizontal");
-        rigidBody2D.velocity = new Vector2(playerSpeed * Time.deltaTime * horizontalInputs, rigidBody2D.velocity.y );
-
-        if(horizontalInputs == 1)
-        {
-            currentDirection = MovementDirection.RIGHT;
-        }
-        else if(horizontalInputs == -1)
-        {
-            currentDirection = MovementDirection.LEFT;
-        }
-    }
-
-    private void UpdatePlayerSpriteDirection()
-    {
-        spriteRenderer.flipX = currentDirection == MovementDirection.LEFT;
-    }   
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public UnityEvent OnApplicationStarts;
     [HideInInspector] public UnityEvent<bool> OnGamePause;
     [HideInInspector] public UnityEvent OnPlayerDie;
+    /// <summary>
+    /// When the user clicks on the start button
+    /// </summary>
     [HideInInspector] public UnityEvent OnGameStarts;
     [HideInInspector] public UnityEvent OnPlayerReachesEndPortal;
     [HideInInspector] public UnityEvent OnPlayerFinishesGame;
@@ -28,16 +31,19 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        Initialize();
     }
 
     private void Start()
     {
         OnApplicationStarts?.Invoke();
+        
     }
 
     private void Initialize()
     {
-        levelManager.DisplayMainMenu();
+        //levelManager.DisplayMainMenu();
     }
 
     public void StartGame()
@@ -51,6 +57,7 @@ public class GameManager : MonoBehaviour
 
     public void SetPause(bool pause)
     {
+        Debug.Log($"Set Pause {pause}");
         IsGamePaused = pause;
         OnGamePause?.Invoke(IsGamePaused);
     }

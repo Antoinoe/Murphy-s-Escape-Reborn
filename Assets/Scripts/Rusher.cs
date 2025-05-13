@@ -11,12 +11,13 @@ public class Rusher : MonoBehaviour
     private void Awake()
     {
         startPosition = transform.position;
-        rb.simulated = false;
+        //rb.simulated = false;
     }
 
     private void Start()
     {
         GameManager.Instance.OnLevelDisplayed.AddListener(OnLevelDisplay);
+        GameManager.Instance.OnGameStarts.AddListener(OnLevelDisplay);
     }
 
     private void OnLevelDisplay()

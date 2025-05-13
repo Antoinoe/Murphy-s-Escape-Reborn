@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -15,6 +16,16 @@ public class Twomper : MonoBehaviour
     {
         yStartPosition = transform.position.y;
         rb.gravityScale = 0;
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.OnLevelDisplayed.AddListener(TeleportToStartPosition);
+    }
+
+    private void TeleportToStartPosition()
+    {
+        transform.position = new Vector2(transform.position.x, yStartPosition);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
